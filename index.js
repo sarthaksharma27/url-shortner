@@ -26,7 +26,6 @@ app.use("/url", restrictToLoggedinUserOnly, urlRoute)
 app.use("/user", checkAuth, UserRoute)
 app.use("/", staticRouter)
 
-
 app.get('/:shortId', async (req, res) => {
     const shortId = req.params.shortId;
     const entry = await URL.findOneAndUpdate(

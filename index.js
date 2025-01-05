@@ -8,6 +8,7 @@ const URL = require('./models/url')
 const urlRoute = require("./routes/url")
 const staticRouter = require("./routes/staticRouter")
 const UserRoute = require("./routes/user")
+const { timeStamp } = require("console")
 
 const app = express()
 const port = 8001;
@@ -26,12 +27,9 @@ app.use("/url", restrictToLoggedinUserOnly, urlRoute)
 app.use("/user", checkAuth, UserRoute)
 app.use("/", staticRouter)
 
-app.get('/:shortId', async (req, res) => {
-    const shortId = req.params.shortId;
-    const entry = await URL.findOneAndUpdate(
-    {
-      shortId,
-    }, 
+app.get('/:shortID', async (req, res) => {
+    const shortID = req.params.shortID;
+    const entry = await URL.findOneAndUpdate({shortId: shortID}, 
     { 
       $push: {
         visitHistory: {
@@ -40,8 +38,8 @@ app.get('/:shortId', async (req, res) => {
       } 
     }
    )
-  //  res.redirect(entry.redirectURL)
-  res.status(200)
+   res.redirect(entry.redirectURL)
 })
+
 
 app.listen(port, () => console.log(`Server started on port${port}`));
